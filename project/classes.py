@@ -1,65 +1,31 @@
-import re
-
 
 class AutonomousSystem:
 
-    NAME_STR = "as-name:"
-    ID_STR = "aut-num:"
-    IMPORT_STR = "import:"
-    EXPORT_STR = "export:"
-    AS_PATTERN = "AS[0-9]*"
-    DATA_SEPARATOR = ":"
+    def __init__(self, asn, name, latitude, longitude):
 
-    def __init__(self, number, name, latitude, longitude):
-
-        self.number = number
+        self.asn = asn
         self.name = name
-        self.neighbours = []
         self.latitude = latitude
         self.longitude = longitude
+        self.peers = []
 
     def __str__(self):
-        str_list = [self.number, self.name, self.latitude, self.longitude]
+        str_list = [self.asn, self.name, self.latitude, self.longitude]
 
-        for neighbour in self.neighbours:
-            str_list.append(neighbour)
+        for peer in self.peers:
+            str_list.append(peer.peer_asn)
 
         return ",".join(str_list)
 
-    def add_neighbour(self, neighbour_id):
-        self.neighbours.append(neighbour_id)
+    def add_peering(self, peering):
 
-    def add_neighbours(self, neighbour_list):
-        self.neighbours.extend(neighbour_list)
+        self.peers.append(peering)
 
-    @classmethod
-    def from_whois_data(cls, whois_data):
 
-        aut_id = ""
-        name = ""
-        latitude = "0"
-        longitude = "0"
-        neighbours = set()
+class Peering:
 
-        whois_list = whois_data.splitlines()
+    def __init__(self, peer_asn, rel_type):
 
-        for line in whois_list:
+        self.peer_asn = peer_asn
+        self.rel_type = rel_type
 
-            if line.startswith(AutonomousSystem.IMPORT_STR) or line.startswith(AutonomousSystem.EXPORT_STR):
-                search = re.search(AutonomousSystem.AS_PATTERN, line)
-                found_id = search.group()
-
-                neighbours.add(found_id)
-
-            elif line.startswith(AutonomousSystem.ID_STR):
-                search = re.search(AutonomousSystem.AS_PATTERN, line)
-                aut_id = search.group()
-
-            elif line.startswith(AutonomousSystem.NAME_STR):
-                name = line.split(AutonomousSystem.DATA_SEPARATOR, 1)[1].strip()
-
-        new_as = cls(aut_id, name, latitude, longitude)
-
-        new_as.add_neighbours(neighbours)
-
-        return new_as

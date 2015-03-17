@@ -1,1 +1,1 @@
-from project import classes, loader
+from project import classes, parser
