@@ -33,15 +33,15 @@ class ASDataParser:
                     if asn in aut_systems:
                         aut_systems.get(asn).add_peering(classes.Peering(peer_asn, rel_type))
                     else:
-                        new_aut_sys = classes.AutonomousSystem(asn, ",", 0, 0)
+                        new_aut_sys = classes.AutonomousSystem(asn, "", 0, 0)
                         new_aut_sys.add_peering(classes.Peering(peer_asn, rel_type))
                         aut_systems[asn] = new_aut_sys
 
         data.close()
         return aut_systems
 
-    def parse_name_data(self, aut_sys):
+    def parse_name_data(self, aut_sys_data):
         pass
 
-    def parse_location_data(self, aut_sys):
+    def parse_location_data(self, aut_sys_data):
         pass
