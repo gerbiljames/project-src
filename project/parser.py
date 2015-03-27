@@ -8,7 +8,17 @@ class ASDataParser:
         self.data_path = "../data/"
         self.rel_pattern = re.compile(ur'^([0-9]*)\|([0-9]*)\|(-1|0)$')
 
-    def parse_file(self, filename):
+    def retrieve_aut_sys_data(self, relations_file="20150301.as-rel.txt"):
+
+        aut_sys = self.parse_relations_file(relations_file)
+
+        # TODO: parse name data
+
+        # TODO: parse location data
+
+        return aut_sys
+
+    def parse_relations_file(self, filename):
 
         aut_systems = dict()
 
@@ -29,3 +39,9 @@ class ASDataParser:
 
         data.close()
         return aut_systems
+
+    def parse_name_data(self, aut_sys):
+        pass
+
+    def parse_location_data(self, aut_sys):
+        pass

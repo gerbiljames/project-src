@@ -9,17 +9,14 @@ class AutonomousSystem:
         self.longitude = longitude
         self.peers = []
 
-    def __str__(self):
-        str_list = [self.asn, self.name, self.latitude, self.longitude]
-
-        for peer in self.peers:
-            str_list.append(peer.peer_asn)
-
-        return ",".join(str_list)
-
     def add_peering(self, peering):
 
         self.peers.append(peering)
+
+    def add_peerings(self, peerings):
+        for peering in peerings:
+
+            self.add_peering(peering)
 
 
 class Peering:
@@ -28,4 +25,3 @@ class Peering:
 
         self.peer_asn = peer_asn
         self.rel_type = rel_type
-
