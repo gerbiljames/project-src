@@ -14,7 +14,7 @@ class ASDataParser:
 
         # TODO: parse name data
 
-        # TODO: parse location data
+        # TODO: parse location data (http://www.telize.com/)
 
         return aut_sys
 
@@ -44,4 +44,14 @@ class ASDataParser:
         pass
 
     def parse_location_data(self, aut_sys_data):
+        pass
+
+
+class ASOrgNameParser:
+
+    def __init__(self):
+        self.whob_executable = "/usr/local/bin/whob"
+        self.contact_option = "-O"
+
+    def get_as_org_name(self, asn):
         pass

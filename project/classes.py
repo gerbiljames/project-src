@@ -4,7 +4,7 @@ class AutonomousSystem:
     def __init__(self, asn, name, latitude, longitude):
 
         self.asn = asn
-        self.name = name
+        self.org_name = name
         self.latitude = latitude
         self.longitude = longitude
         self.peers = []
