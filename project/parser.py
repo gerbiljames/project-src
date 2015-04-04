@@ -1,6 +1,4 @@
 import re
-import subprocess
-import csv
 from project import classes
 
 
@@ -9,25 +7,63 @@ class ASDataParser:
     def __init__(self):
         self.data_path = "../data/"
 
-        self.rel_pattern = re.compile(ur'^([0-9]*)\|([0-9]*)\|(-1|0)$')
+        self.orgcode_pattern = re.compile(ur'^([0-9]+)\|([0-9]*)\|(.*)\|(.+)\|(.+)$')
 
-        self.name_pattern = re.compile(ur'([0-9]+)\s(.*)')
+        self.orgname_pattern = re.compile(ur'^(.+)\|([0-9]*)\|(.*)\|([A-Z]*)\|(.+)$')
 
-    def retrieve_aut_sys_data(self, relations_file="20150301.as-rel.txt", name_file="20150402.as-name.txt"):
+        self.rel_pattern = re.compile(ur'^([0-9]+)\|([0-9]+)\|(-1|0)$')
 
-        aut_sys = self.parse_relations_file(relations_file)
+    def retrieve_aut_sys_data(self):
 
-        aut_sys = self.parse_name_file(aut_sys, name_file)
+        aut_sys_list = self.parse_org_code_file()
+
+        aut_sys_list = self.parse_org_name_file(aut_sys_list)
+
+        aut_sys_list = self.parse_relations_file(aut_sys_list)
 
         # TODO: parse location data
 
-        return aut_sys
+        return aut_sys_list
 
-    def parse_relations_file(self, filename):
+    def parse_org_code_file(self, orgcode_file="20150101.as-orgcodes.txt"):
 
-        aut_systems = dict()
+        aut_sys_list = dict()
 
-        with open(self.data_path + filename) as data:
+        with open(self.data_path + orgcode_file) as data:
+            for line in data:
+                m = re.search(self.orgcode_pattern, line)
+                if m:
+                    asn = m.group(1)
+                    org_code = m.group(4)
+
+                    aut_sys = classes.AutonomousSystem(asn, org_code)
+                    aut_sys_list[asn] = aut_sys
+
+        return aut_sys_list
+
+    def parse_org_name_file(self, aut_sys_list, org_name_file="20150101.as-orgnames.txt"):
+
+        org_name_list = dict()
+
+        with open(self.data_path + org_name_file) as data:
+            for line in data:
+                m = re.search(self.orgname_pattern, line)
+                if m:
+                    org_code = m.group(1)
+                    org_name = m.group(3)
+                    org_name_list[org_code] = org_name
+
+        for asn in aut_sys_list:
+            org_code = aut_sys_list[asn].org_code
+
+            if org_code in org_name_list:
+                aut_sys_list[asn].org_name = org_name_list[org_code]
+
+        return aut_sys_list
+
+    def parse_relations_file(self, aut_sys_list, rel_file="20150301.as-rel.txt"):
+
+        with open(self.data_path + rel_file) as data:
             for line in data:
                 m = re.search(self.rel_pattern, line)
                 if m:
@@ -35,28 +71,10 @@ class ASDataParser:
                     peer_asn = m.group(2)
                     rel_type = m.group(3)
 
-                    if asn in aut_systems:
-                        aut_systems.get(asn).add_peering(classes.Peering(peer_asn, rel_type))
-                    else:
-                        new_aut_sys = classes.AutonomousSystem(asn, "", 0, 0)
-                        new_aut_sys.add_peering(classes.Peering(peer_asn, rel_type))
-                        aut_systems[asn] = new_aut_sys
+                    if asn in aut_sys_list:
+                        aut_sys_list.get(asn).add_peering(classes.Peering(peer_asn, rel_type))
 
-        return aut_systems
-
-    def parse_name_file(self, aut_sys_data, name_file):
-
-        with open(self.data_path + name_file) as data:
-            for line in data:
-                m = re.search(self.name_pattern, line)
-                if m:
-                    asn = m.group(1)
-                    org_name = m.group(2)
-
-                    if asn in aut_sys_data:
-                        aut_sys_data[asn].org_name = org_name
-
-        return aut_sys_data
+        return aut_sys_list
 
     def parse_location_data(self, aut_sys_data):
         pass

@@ -1,12 +1,13 @@
 
 class AutonomousSystem:
 
-    def __init__(self, asn, name, latitude, longitude):
+    def __init__(self, asn, code):
 
         self.asn = asn
-        self.org_name = name
-        self.latitude = latitude
-        self.longitude = longitude
+        self.org_code = code
+        self.org_name = None
+        self.latitude = None
+        self.longitude = None
         self.peers = []
 
     def add_peering(self, peering):
