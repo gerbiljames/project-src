@@ -8,7 +8,7 @@ aut_systems = as_parser.retrieve_aut_sys_data()
 
 total = 0
 for asn in aut_systems:
-    if aut_systems[asn].org_name is None:
+    if aut_systems[asn].ip is None:
         print ("OH NO:" + asn)
         total += 1
 

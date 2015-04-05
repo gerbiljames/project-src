@@ -1,5 +1,8 @@
 import re
 from project import classes
+import csv
+import pyasn
+import random
 
 
 class ASDataParser:
@@ -21,7 +24,7 @@ class ASDataParser:
 
         aut_sys_list = self.parse_relations_file(aut_sys_list)
 
-        # TODO: parse location data
+        aut_sys_list = self.parse_ip_data(aut_sys_list)
 
         return aut_sys_list
 
@@ -76,5 +79,20 @@ class ASDataParser:
 
         return aut_sys_list
 
-    def parse_location_data(self, aut_sys_data):
-        pass
+    def parse_ip_data(self, aut_sys_data, ipasn_file="20150405.ipasn.db"):
+
+        asndb = pyasn.pyasn(self.data_path + ipasn_file)
+
+        for asn in aut_sys_data:
+
+            prefixes = asndb.get_as_prefixes(asn)
+
+            if prefixes:
+
+                prefix = random.sample(prefixes, 1)[0]
+
+                ip = prefix.split("/")[0]
+
+                aut_sys_data[asn].ip = ip
+
+        return aut_sys_data

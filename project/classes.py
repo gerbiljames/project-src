@@ -6,6 +6,7 @@ class AutonomousSystem:
         self.asn = asn
         self.org_code = code
         self.org_name = None
+        self.ip = None
         self.latitude = None
         self.longitude = None
         self.peers = []
