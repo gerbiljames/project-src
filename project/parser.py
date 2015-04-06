@@ -28,6 +28,8 @@ class ASDataParser:
 
         aut_sys_list = self.parse_location_data(aut_sys_list)
 
+        aut_sys_list = self.filter_valid_data(aut_sys_list)
+
         return aut_sys_list
 
     def parse_org_code_file(self, orgcode_file="20150101.as-orgcodes.txt"):
@@ -117,3 +119,36 @@ class ASDataParser:
                         aut_sys_data[asn].longitude = loc[1]
 
         return aut_sys_data
+
+    def generate_graph_subset(self, aut_sys_data, depth=3, current_system_asn="1"):
+
+        if current_system_asn in aut_sys_data:
+
+            aut_sys = aut_sys_data[current_system_asn]
+
+            if depth == 0:
+                return {current_system_asn: aut_sys}
+
+            found_systems = dict()
+
+            for peering in aut_sys.peers:
+
+                found_systems.update(self.generate_graph_subset(aut_sys_data, depth=depth-1, current_system_asn=peering.peer_asn))
+
+            found_systems.update({current_system_asn: aut_sys})
+
+            return found_systems
+
+        return dict()
+
+    def filter_valid_data(self, aut_sys_data):
+
+        valid_as_list = dict()
+
+        for asn in aut_sys_data:
+
+            if aut_sys_data[asn].latitude and aut_sys_data[asn].longitude and aut_sys_data[asn].org_name:
+
+                valid_as_list[asn] = aut_sys_data[asn]
+
+        return valid_as_list
