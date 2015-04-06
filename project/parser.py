@@ -1,8 +1,8 @@
 import re
 from project import classes
-import csv
 import pyasn
 import random
+from geoip import geolite2
 
 
 class ASDataParser:
@@ -25,6 +25,8 @@ class ASDataParser:
         aut_sys_list = self.parse_relations_file(aut_sys_list)
 
         aut_sys_list = self.parse_ip_data(aut_sys_list)
+
+        aut_sys_list = self.parse_location_data(aut_sys_list)
 
         return aut_sys_list
 
@@ -94,5 +96,24 @@ class ASDataParser:
                 ip = prefix.split("/")[0]
 
                 aut_sys_data[asn].ip = ip
+
+        return aut_sys_data
+
+    def parse_location_data(self, aut_sys_data):
+
+        for asn in aut_sys_data:
+
+            if aut_sys_data[asn].ip:
+
+                match = geolite2.lookup(aut_sys_data[asn].ip)
+
+                if match:
+
+                    if match.location:
+                        loc = match.location
+
+                        aut_sys_data[asn].latitude = loc[0]
+
+                        aut_sys_data[asn].longitude = loc[1]
 
         return aut_sys_data
