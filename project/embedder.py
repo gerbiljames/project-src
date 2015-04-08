@@ -1,5 +1,6 @@
 from math import sqrt
 from numpy import matlib
+import matlab_wrapper
 
 
 class HyperbolicEmbedder:
@@ -45,3 +46,17 @@ class HyperbolicEmbedder:
     def calculate_euclidean_distance(self, xy1, xy2):
 
         return sqrt(((xy2[0] - xy1[0]) ** 2) + ((xy2[1] - xy1[1]) ** 2))
+
+    def hyperbolic_embed(self, distance_matrix):
+
+        matlab = matlab_wrapper.MatlabSession()
+
+        matlab.put("D", distance_matrix)
+
+        matlab.eval("hyperbolic_embed(D)")
+
+        kernel_matrix = matlab.get("Z")
+
+        radius = matlab.get("r")
+
+        return kernel_matrix, radius
