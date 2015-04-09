@@ -19,27 +19,19 @@ class HyperbolicEmbedder:
 
         distance_matrix = matlib.zeros(dim)
 
-        for index, asn in enumerate(asn_ordered_list):
+        for index_outer, asn_outer in enumerate(asn_ordered_list):
 
-            aut_sys_object = aut_sys_data[asn]
+            aut_sys_outer = aut_sys_data[asn_outer]
 
-            if aut_sys_object.peers:
+            for index_inner, asn_inner in enumerate(asn_ordered_list):
 
-                for peering in aut_sys_object.peers:
+                aut_sys_inner = aut_sys_data[asn_inner]
 
-                    peer_asn = peering.peer_asn
+                distance = self.calculate_euclidean_distance((aut_sys_outer.latitude, aut_sys_outer.longitude), (aut_sys_inner.latitude, aut_sys_inner.longitude))
 
-                    if peer_asn in asn_ordered_list:
+                distance_matrix[index_outer, index_inner] = distance
 
-                        peer_index = asn_ordered_list.index(peer_asn)
-
-                        peer_aut_sys_object = aut_sys_data[peer_asn]
-
-                        distance = self.calculate_euclidean_distance((aut_sys_object.latitude, aut_sys_object.longitude), (peer_aut_sys_object.latitude, peer_aut_sys_object.longitude))
-
-                        distance_matrix[index, peer_index] = distance
-
-                        distance_matrix[peer_index, index] = distance
+                distance_matrix[index_inner, index_outer] = distance
 
         return distance_matrix
 
@@ -53,7 +45,7 @@ class HyperbolicEmbedder:
 
         matlab.put("D", distance_matrix)
 
-        matlab.eval("hyperbolic_embed(D)")
+        matlab.eval("[Z, r] = hyperbolic_embed(D)")
 
         kernel_matrix = matlab.get("Z")
 

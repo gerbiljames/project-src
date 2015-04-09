@@ -14,4 +14,6 @@ asn_ordered_list = as_embedder.generate_ordered_asn_list(aut_sys_data)
 
 distance_matrix = as_embedder.generate_distance_matrix(aut_sys_data, asn_ordered_list)
 
-as_embedder.hyperbolic_embed(distance_matrix)
+return_value = as_embedder.hyperbolic_embed(distance_matrix)
+
+print(return_value[1])
