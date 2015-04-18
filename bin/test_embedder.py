@@ -17,3 +17,5 @@ distance_matrix = as_embedder.generate_distance_matrix(aut_sys_data, asn_ordered
 return_value = as_embedder.hyperbolic_embed(distance_matrix)
 
 print(return_value[1])
+
+print(return_value[0])

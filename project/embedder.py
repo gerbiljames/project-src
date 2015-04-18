@@ -1,4 +1,4 @@
-from math import sqrt
+from math import radians, sin, cos, sqrt, asin
 from numpy import matlib
 import matlab_wrapper
 
@@ -7,7 +7,7 @@ class HyperbolicEmbedder:
 
     def __init__(self):
 
-        pass
+        self.earth_radius = 6371
 
     def generate_ordered_asn_list(self, aut_sys_data):
 
@@ -27,7 +27,7 @@ class HyperbolicEmbedder:
 
                 aut_sys_inner = aut_sys_data[asn_inner]
 
-                distance = self.calculate_euclidean_distance((aut_sys_outer.latitude, aut_sys_outer.longitude), (aut_sys_inner.latitude, aut_sys_inner.longitude))
+                distance = self.haversine((aut_sys_outer.latitude, aut_sys_outer.longitude), (aut_sys_inner.latitude, aut_sys_inner.longitude))
 
                 distance_matrix[index_outer, index_inner] = distance
 
@@ -35,9 +35,17 @@ class HyperbolicEmbedder:
 
         return distance_matrix
 
-    def calculate_euclidean_distance(self, xy1, xy2):
+    def haversine(self, latlong0, latlong1):
 
-        return sqrt(((xy2[0] - xy1[0]) ** 2) + ((xy2[1] - xy1[1]) ** 2))
+        dlat = radians(latlong1[0] - latlong0[0])
+        dlong = radians(latlong1[1] - latlong0[1])
+        lat0 = radians(latlong0[0])
+        lat1 = radians(latlong1[0])
+
+        a = sin(dlat/2)**2 + cos(lat0)*cos(lat1)*sin(dlong/2)**2
+        c = 2*asin(sqrt(a))
+
+        return self.earth_radius * c
 
     def hyperbolic_embed(self, distance_matrix):
 
