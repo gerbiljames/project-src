@@ -14,8 +14,11 @@ asn_ordered_list = as_embedder.generate_ordered_asn_list(aut_sys_data)
 
 distance_matrix = as_embedder.generate_distance_matrix(aut_sys_data, asn_ordered_list)
 
-return_value = as_embedder.hyperbolic_embed(distance_matrix)
+hyperbolic_distances, radius = as_embedder.hyperbolic_embed(distance_matrix)
 
-print(return_value[1])
+eigenvalues, eigenvectors = as_embedder.calculate_eigv(hyperbolic_distances)
 
-print(return_value[0])
+hyperbolic_matrix = as_embedder.calculate_embedding_matrix(radius, eigenvectors, eigenvalues)
+
+hyperbolic_points = as_embedder.find_hyperbolic_point_matrix(hyperbolic_matrix, eigenvalues)
+
