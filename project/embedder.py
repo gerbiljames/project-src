@@ -1,5 +1,5 @@
 from math import radians, sin, cos, asin
-from numpy import matlib, ndenumerate, diag, sqrt, absolute, where
+from numpy import matlib, ndenumerate, sqrt, absolute, where
 from scipy import linalg
 import matlab_wrapper
 
@@ -99,7 +99,7 @@ class HyperbolicEmbedder:
 
         sorted_eigenvalues = sorted(eigenvalues)
 
-        neg0 = where(eigenvalues == sorted_eigenvalues[0])[0][0]
+        # neg0 = where(eigenvalues == sorted_eigenvalues[0])[0][0]
 
         pos0 = where(eigenvalues == sorted_eigenvalues[-1])[0][0]
 
@@ -107,4 +107,4 @@ class HyperbolicEmbedder:
 
         pos2 = where(eigenvalues == sorted_eigenvalues[-3])[0][0]
 
-        return pos0, pos1, pos2, neg0
+        return pos0, pos1, pos2
