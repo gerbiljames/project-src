@@ -8,9 +8,9 @@ as_parser = parser.ASDataParser()
 
 aut_sys_data = as_parser.retrieve_aut_sys_data()
 
-aut_sys_data = as_parser.generate_graph_subset(aut_sys_data)
+aut_sys_data = as_parser.generate_graph_subset(aut_sys_data, depth=3, current_system_asn="1")
 
-print "Embedding Data..."
+print "Embedding " + str(len(aut_sys_data)) + " ASes..."
 
 as_embedder = embedder.HyperbolicEmbedder()
 
