@@ -30,6 +30,8 @@ class HyperbolicEmbedder:
 
                 distance = self.haversine((aut_sys_outer.latitude, aut_sys_outer.longitude), (aut_sys_inner.latitude, aut_sys_inner.longitude))
 
+                distance += ((abs(len(aut_sys_outer.peers) - len(aut_sys_inner.peers))) * 3)
+
                 distance_matrix[index_outer, index_inner] = distance
 
                 distance_matrix[index_inner, index_outer] = distance
@@ -99,7 +101,7 @@ class HyperbolicEmbedder:
 
         sorted_eigenvalues = sorted(eigenvalues)
 
-        # neg0 = where(eigenvalues == sorted_eigenvalues[0])[0][0]
+        neg0 = where(eigenvalues == sorted_eigenvalues[0])[0][0]
 
         pos0 = where(eigenvalues == sorted_eigenvalues[-1])[0][0]
 
