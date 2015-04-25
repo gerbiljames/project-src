@@ -22,12 +22,14 @@ hyperbolic_distances, radius = as_embedder.hyperbolic_embed(distance_matrix)
 
 eigenvalues, eigenvectors = as_embedder.calculate_eigv(hyperbolic_distances)
 
-hyperbolic_matrix = as_embedder.calculate_embedding_matrix(radius, eigenvectors, eigenvalues)
+inner_product_matrix = as_embedder.calculate_embedding_inner_product_matrix(radius, eigenvectors, eigenvalues)
 
-hyperbolic_points = as_embedder.find_hyperbolic_point_matrix(hyperbolic_matrix, eigenvalues)
+hyperboloid_points = as_embedder.find_hyperboloid_point_matrix(inner_product_matrix, eigenvalues)
+
+ball_matrix = as_embedder.convert_to_ball_model(hyperboloid_points)
 
 print "Visualising Data..."
 
 euclid_visualiser = visualiser.EuclideanVisualiser()
 
-euclid_visualiser.visualise(hyperbolic_points, asn_ordered_list, aut_sys_data)
+euclid_visualiser.visualise(ball_matrix, asn_ordered_list, aut_sys_data)

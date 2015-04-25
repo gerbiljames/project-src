@@ -16,14 +16,12 @@ class EuclideanVisualiser:
         points_mapper = self.generate_points_mapper(points_glyph_filter)
         points_actor = self.generate_points_actor(points_mapper)
 
-
         lines, colours = self.generate_lines_and_colours(asn_ordered_list, aut_sys_data)
         lines_poly_data = self.generate_lines_poly_data(lines, points, colours)
         lines_mapper = self.generate_mapper(lines_poly_data)
         lines_actor = self.generate_actor(lines_mapper)
 
-
-        self.render(points_actor, lines_actor)
+        self.render(points_actor)
 
     def generate_points(self, hyperbolic_points):
 

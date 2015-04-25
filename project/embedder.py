@@ -87,11 +87,11 @@ class HyperbolicEmbedder:
 
         return eigenvalues, eigenvectors
 
-    def calculate_embedding_matrix(self, radius, eigenvectors, eigenvalues):
+    def calculate_embedding_inner_product_matrix(self, radius, eigenvectors, eigenvalues):
 
         return radius * eigenvectors * sqrt(absolute(eigenvalues))
 
-    def find_hyperbolic_point_matrix(self, hyperbolic_matrix, eigenvalues):
+    def find_hyperboloid_point_matrix(self, hyperbolic_matrix, eigenvalues):
 
         dimension_columns = self.find_dimension_columns(eigenvalues)
 
@@ -109,4 +109,20 @@ class HyperbolicEmbedder:
 
         pos2 = where(eigenvalues == sorted_eigenvalues[-3])[0][0]
 
-        return pos0, pos1, pos2
+        return neg0, pos0, pos1, pos2
+
+    def convert_to_ball_model(self, hyperboloid_matrix):
+
+        ball_model_coords = []
+
+        for coords in hyperboloid_matrix:
+
+            x0 = coords[0]
+
+            const = 1 / (x0 + 1)
+
+            ball_model_coords.append(const * coords[1:])
+
+        return ball_model_coords
+
+

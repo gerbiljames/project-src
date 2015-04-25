@@ -18,7 +18,7 @@ hyperbolic_distances, radius = as_embedder.hyperbolic_embed(distance_matrix)
 
 eigenvalues, eigenvectors = as_embedder.calculate_eigv(hyperbolic_distances)
 
-hyperbolic_matrix = as_embedder.calculate_embedding_matrix(radius, eigenvectors, eigenvalues)
+hyperbolic_matrix = as_embedder.calculate_embedding_inner_product_matrix(radius, eigenvectors, eigenvalues)
 
-hyperbolic_points = as_embedder.find_hyperbolic_point_matrix(hyperbolic_matrix, eigenvalues)
+hyperbolic_points = as_embedder.find_hyperboloid_point_matrix(hyperbolic_matrix, eigenvalues)
 
