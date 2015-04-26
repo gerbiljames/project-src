@@ -8,9 +8,9 @@ class EuclideanVisualiser:
         self.red = [255, 0, 0]
         self.green = [0, 255, 0]
 
-    def visualise(self, hyperbolic_points, asn_ordered_list, aut_sys_data):
+    def visualise(self, euclidean_points, asn_ordered_list, aut_sys_data):
 
-        points = self.generate_points(hyperbolic_points)
+        points = self.generate_points(euclidean_points)
         points_poly = self.generate_point_poly_data(points)
         points_glyph_filter = self.generate_vertex_glyph_filter(points_poly)
         points_mapper = self.generate_points_mapper(points_glyph_filter)
@@ -21,7 +21,9 @@ class EuclideanVisualiser:
         lines_mapper = self.generate_mapper(lines_poly_data)
         lines_actor = self.generate_actor(lines_mapper)
 
-        self.render(points_actor)
+        origin_actor = self.generate_origin_glyph_actor()
+
+        self.render(points_actor, origin_actor, lines_actor)
 
     def generate_points(self, hyperbolic_points):
 
@@ -161,3 +163,21 @@ class EuclideanVisualiser:
         lines_poly_data.GetCellData().SetScalars(colours)
 
         return lines_poly_data
+
+    def generate_origin_glyph_actor(self):
+
+        origin = (0, 0, 0)
+
+        points = self.generate_points([origin])
+
+        poly_data = self.generate_point_poly_data(points)
+
+        glyph_filter = self.generate_vertex_glyph_filter(poly_data)
+
+        mapper = self.generate_points_mapper(glyph_filter)
+
+        actor = self.generate_points_actor(mapper)
+
+        actor.GetProperty().SetPointSize(5)
+
+        return actor

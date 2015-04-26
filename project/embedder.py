@@ -30,7 +30,7 @@ class HyperbolicEmbedder:
 
                 distance = self.haversine((aut_sys_outer.latitude, aut_sys_outer.longitude), (aut_sys_inner.latitude, aut_sys_inner.longitude))
 
-                distance += ((abs(len(aut_sys_outer.peers) - len(aut_sys_inner.peers))) * 3)
+                distance -= 3 * (abs(len(aut_sys_outer.peers) - len(aut_sys_inner.peers)))
 
                 distance_matrix[index_outer, index_inner] = distance
 
@@ -111,7 +111,7 @@ class HyperbolicEmbedder:
 
         return neg0, pos0, pos1, pos2
 
-    def convert_to_ball_model(self, hyperboloid_matrix):
+    def convert_hyperboloid_to_ball(self, hyperboloid_matrix):
 
         ball_model_coords = []
 
@@ -124,5 +124,37 @@ class HyperbolicEmbedder:
             ball_model_coords.append(const * coords[1:])
 
         return ball_model_coords
+
+    def convert_ball_to_klein(self, ball_matrix):
+
+        klein_coords = []
+
+        for coords in ball_matrix:
+
+            klein_coords.append((2 * coords) / (1 + coords * coords))
+
+        return klein_coords
+
+    def convert_ball_to_upper_half(self, ball_matrix):
+
+        upper_half_coords = []
+
+        for coords in ball_matrix:
+
+            new_coord = []
+
+            norm_squared = linalg.norm(coords) ** 2
+
+            for coord in coords[:-1]:
+
+                new_coord.append((2 / (1 - (2 * coord) + norm_squared)) * coord)
+
+            new_coord.append(((2 / (1 - 2 * coords[-1]) + norm_squared) * (1 - coords[-1])) + 1)
+
+            upper_half_coords.append(new_coord)
+
+        return upper_half_coords
+
+
 
 

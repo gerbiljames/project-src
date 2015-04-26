@@ -26,10 +26,14 @@ inner_product_matrix = as_embedder.calculate_embedding_inner_product_matrix(radi
 
 hyperboloid_points = as_embedder.find_hyperboloid_point_matrix(inner_product_matrix, eigenvalues)
 
-ball_matrix = as_embedder.convert_to_ball_model(hyperboloid_points)
+ball_matrix = as_embedder.convert_hyperboloid_to_ball(hyperboloid_points)
+
+klein_matrix = as_embedder.convert_ball_to_klein(ball_matrix)
+
+upper_half_matrix = as_embedder.convert_ball_to_upper_half(ball_matrix)
 
 print "Visualising Data..."
 
 euclid_visualiser = visualiser.EuclideanVisualiser()
 
-euclid_visualiser.visualise(ball_matrix, asn_ordered_list, aut_sys_data)
+euclid_visualiser.visualise(klein_matrix, asn_ordered_list, aut_sys_data)
