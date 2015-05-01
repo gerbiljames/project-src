@@ -1,8 +1,7 @@
 from math import radians, sin, cos, asin
 from numpy import matlib, ndenumerate, sqrt, absolute, where
 from scipy import linalg
-import matlab_wrapper
-
+from mlabwrap import mlab
 
 class HyperbolicEmbedder:
 
@@ -69,15 +68,7 @@ class HyperbolicEmbedder:
 
     def hyperbolic_embed(self, distance_matrix):
 
-        matlab = matlab_wrapper.MatlabSession()
-
-        matlab.put("D", distance_matrix)
-
-        matlab.eval("[Z, r] = hyperbolic_embed(D);")
-
-        kernel_matrix = matlab.get("Z")
-
-        radius = matlab.get("r")
+        kernel_matrix, radius = mlab.hyperbolic_embed(distance_matrix, nout=2)
 
         return kernel_matrix, radius
 
